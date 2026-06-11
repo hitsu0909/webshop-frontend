@@ -40,6 +40,10 @@ const routes = [
 {
   path: '/orderdetail/:id',
   component: OrderDetail
+},
+{
+  path: '/',
+  redirect: '/userlogin'
 }
 ]
 
