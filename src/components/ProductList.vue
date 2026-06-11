@@ -112,7 +112,7 @@ const sortOrder = ref('recommend')
 
 // ✅ 商品取得
 const fetchProducts = async () => {
-  const res = await fetch('http://localhost:3000/products')
+  const res = await fetch('https://your-backend.onrender.com/products')
   const data = await res.json()
   productsOriginal.value = formatProducts(data)
   applyFilters()
@@ -120,7 +120,7 @@ const fetchProducts = async () => {
 
 // ✅ カテゴリ取得
 const fetchCategories = async () => {
-  const res = await fetch('http://localhost:3000/categories')
+  const res = await fetch('https://your-backend.onrender.com/categories')
   const data = await res.json()
   categories.value = data
   // categories.value = await res.json()
@@ -132,10 +132,10 @@ const loadCategory = async (category) => {
 
     if (!category) {
       // ✅ すべて
-      url = 'http://localhost:3000/products'
+      url = 'https://your-backend.onrender.com/products'
     } else {
       // ✅ カテゴリ指定
-      url = `http://localhost:3000/products/category/${category}`
+      url = `https://your-backend.onrender.com/products/category/${category}`
     }
 
     const res = await fetch(url)
@@ -206,7 +206,7 @@ const addToCart = async (product) => {
   try {
     const user = JSON.parse(localStorage.getItem('user'))
 
-    const res = await fetch('http://localhost:3000/cart', {
+    const res = await fetch('https://your-backend.onrender.com/cart', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({

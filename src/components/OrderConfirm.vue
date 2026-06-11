@@ -165,7 +165,7 @@ onMounted(async () => {
   const userData = localStorage.getItem('user')
   user.value = userData ? JSON.parse(userData) : {}
 
-  const res = await fetch(`http://localhost:3000/cart/${user.value.user_id}`)
+  const res = await fetch(`https://your-backend.onrender.com/cart/${user.value.user_id}`)
   const data = await res.json()
 
   cart.value = data.map(item => ({
@@ -208,7 +208,7 @@ const confirmOrder = async () => {
   const userData = JSON.parse(localStorage.getItem('user'))
 
   try {
-    const res = await fetch('http://localhost:3000/order', {
+    const res = await fetch('https://your-backend.onrender.com/order', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({

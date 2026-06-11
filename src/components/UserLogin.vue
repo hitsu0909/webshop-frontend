@@ -86,7 +86,7 @@ const login = async () => {
   errorMsg.value = ''
 
   try {
-    const res = await fetch('http://localhost:3000/login', {
+    const res = await fetch('https://your-backend.onrender.com/login', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
