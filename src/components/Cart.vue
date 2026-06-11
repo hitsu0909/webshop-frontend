@@ -143,7 +143,7 @@ const goOrder = () => {
 // }
 
 const updateQuantity = async (item) => {
-  await fetch('https://your-backend.onrender.com/cart', {
+  await fetch('https://webshop-backend-ejb6.onrender.com/cart', {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json'
@@ -161,7 +161,7 @@ const updateQuantity = async (item) => {
 //   updateCart()
 // }
 const removeItem = async (detailId) => {
-  await fetch(`https://your-backend.onrender.com/cart/${detailId}`, {
+  await fetch(`https://webshop-backend-ejb6.onrender.com/cart/${detailId}`, {
     method: 'DELETE'
   })
 
@@ -174,7 +174,7 @@ const loadCart = async () => {
 
   const user = JSON.parse(localStorage.getItem('user'))
 
-  const res = await fetch(`https://your-backend.onrender.com/cart/${user.user_id}`)
+  const res = await fetch(`https://webshop-backend-ejb6.onrender.com/cart/${user.user_id}`)
   const data = await res.json()
 
   cart.value = data.map(item => ({

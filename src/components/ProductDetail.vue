@@ -115,7 +115,7 @@ const route = useRoute()
 const product = ref(null)
 
 const fetchProduct = async () => {
-  const res = await fetch(`https://your-backend.onrender.com/products/${route.params.id}`)
+  const res = await fetch(`https://webshop-backend-ejb6.onrender.com/products/${route.params.id}`)
   const data = await res.json()
   product.value = formatProduct(data)
 }
@@ -184,7 +184,7 @@ const addToCart = async (product) => {
   try {
     const user = JSON.parse(localStorage.getItem('user'))
 
-    const res = await fetch('https://your-backend.onrender.com/cart', {
+    const res = await fetch('https://webshop-backend-ejb6.onrender.com/cart', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({

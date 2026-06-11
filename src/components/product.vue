@@ -14,7 +14,7 @@ export default {
     const products = ref([])
 
     onMounted(async () => {
-      const res = await fetch('https://your-backend.onrender.com/products')
+      const res = await fetch('https://webshop-backend-ejb6.onrender.com/products')
       const data = await res.json()
       products.value = data
     })

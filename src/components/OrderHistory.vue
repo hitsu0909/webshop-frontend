@@ -87,7 +87,7 @@ onMounted(async () => {
   isLoading.value = true
   const user = JSON.parse(localStorage.getItem('user'))
   
-  const res = await fetch(`https://your-backend.onrender.com/orders/${user.user_id}`)
+  const res = await fetch(`https://webshop-backend-ejb6.onrender.com/orders/${user.user_id}`)
   const data = await res.json()
 
   orders.value = data
@@ -130,7 +130,7 @@ const deleteOrder = async (id) => {
   const ok = confirm('本当に削除しますか？')
   if (!ok) return
 
-  await fetch(`https://your-backend.onrender.com/order/${id}`, {
+  await fetch(`https://webshop-backend-ejb6.onrender.com/order/${id}`, {
     method: 'DELETE'
   })
 
@@ -141,7 +141,7 @@ const deleteOrder = async (id) => {
 const loadOrders = async () => {
   const user = JSON.parse(localStorage.getItem('user'))
 
-  const res = await fetch(`https://your-backend.onrender.com/orders/${user.user_id}`)
+  const res = await fetch(`https://webshop-backend-ejb6.onrender.com/orders/${user.user_id}`)
   const data = await res.json()
 
   orders.value = data

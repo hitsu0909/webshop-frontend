@@ -121,7 +121,7 @@ const order = ref(null)
 onMounted(async () => {
   const id = route.params.id
   isLoading.value = true
-  const res = await fetch(`https://your-backend.onrender.com/order/${id}`)
+  const res = await fetch(`https://webshop-backend-ejb6.onrender.com/order/${id}`)
   const data = await res.json()
 
   order.value = data

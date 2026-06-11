@@ -127,7 +127,7 @@ const maskedPassword = computed(() => {
 
 const register = async () => {
   try {
-    const res = await fetch('https://your-backend.onrender.com/register', {
+    const res = await fetch('https://webshop-backend-ejb6.onrender.com/register', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({

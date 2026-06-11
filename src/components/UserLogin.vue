@@ -86,7 +86,7 @@ const login = async () => {
   errorMsg.value = ''
 
   try {
-    const res = await fetch('https://your-backend.onrender.com/login', {
+    const res = await fetch('https://webshop-backend-ejb6.onrender.com/login', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({

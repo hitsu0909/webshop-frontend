@@ -245,7 +245,7 @@ const save = async () => {
   try {
     const user = JSON.parse(localStorage.getItem('user'))
 
-    const res = await fetch(`https://your-backend.onrender.com/user/${user.user_id}`, {
+    const res = await fetch(`https://webshop-backend-ejb6.onrender.com/user/${user.user_id}`, {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(form)
