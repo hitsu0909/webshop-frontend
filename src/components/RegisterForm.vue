@@ -216,7 +216,7 @@ if (!emailRegex.test(form.email)) {
 const phoneClean = form.phone.replace(/-/g, '')
 
 if (!/^0\d{9,10}$/.test(phoneClean)) {
-  errors.phone = '電話番号は10〜11桁で入力してください'
+  errors.phone = '電話番号は0から始まる10〜11桁で入力してください'
   ok = false
 }
 
