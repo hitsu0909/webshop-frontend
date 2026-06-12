@@ -55,13 +55,13 @@
           </tr>
 
 <!-- パスワード -->
-          <tr>
+          <!-- <tr>
             <th class="confirm-label">パスワード</th>
             <td class="confirm-data">{{ maskedPassword }}</td>
 
             <th class="confirm-label">確認</th>
             <td class="confirm-data">{{ maskedPassword }}</td>
-          </tr>
+          </tr> -->
         </tbody>
       </table>
       <p class="form-note"><span class="required">*</span>以上の内容は登録中です。変更の必要があれば、「編集する」ボタンをクリックしてください。</p>
