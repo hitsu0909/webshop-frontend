@@ -85,6 +85,7 @@
           <div>合計金額：¥{{ totalPrice.toLocaleString() }}</div>
         </div>
         <p class="form-note"><span class="required">*</span>金額に10%の消費税が含んでいます。</p>
+        <p class="form-note"><span class="required">*</span>※行をクリックすると詳細メニューが表示されます</p>
         <!-- 戻る -->
         <div class="button-group">
           <button class="btn btn-secondary" @click="$router.push('/products')">
