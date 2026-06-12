@@ -1083,10 +1083,12 @@ body {
     color: #0066cc;
     text-decoration: underline;
     font-size: 14px;
+    cursor: pointer;
 }
 
 .header-links a:hover {
     color: #0052a3;
+    opacity: 0.8;
 }
 
 /* ===========================
