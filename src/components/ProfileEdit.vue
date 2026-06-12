@@ -155,143 +155,110 @@ onMounted(() => {
 const errors = reactive({})
 
 const save = async () => {
+
+  // ✅ エラー初期化
   Object.keys(errors).forEach(k => errors[k] = '')
   let ok = true
 
-  if (!form.company_name) {
-    errors.company_name = '会社名を入力してください'
-    ok = false
-  }
+  // ✅ ① 全項目安全化（最重要🔥）
+  Object.keys(form).forEach(key => {
+    form[key] = (form[key] || '').toString().trim()
+  })
 
-  if (!form.company_kana) {
-    errors.company_kana = '会社フリガナを入力してください'
-    ok = false
-  }
+  // ✅ ② フリガナ変換（先にやる）
+  form.company_kana = form.company_kana.replace(/[ぁ-ん]/g, s =>
+    String.fromCharCode(s.charCodeAt(0) + 0x60)
+  )
 
-  if (!form.user_name) {
-    errors.user_name = '担当者名を入力してください'
-    ok = false
-  }
+  form.user_kana = form.user_kana.replace(/[ぁ-ん]/g, s =>
+    String.fromCharCode(s.charCodeAt(0) + 0x60)
+  )
 
-  if (!form.user_kana) {
-    errors.user_kana = '担当者フリガナを入力してください'
-    ok = false
-  }
+  // ✅ ③ 数値系の整形
+  form.phone = form.phone.replace(/[^\d-]/g, '')
+  form.postal_code = form.postal_code.replace(/[^\d-]/g, '')
 
-  if (!form.postal_code) {
-    errors.postal_code = '郵便番号を入力してください'
-    ok = false
-  }
+  // ✅ ④ 必須チェック
+  if (!form.company_name) { errors.company_name = '会社名を入力してください'; ok = false }
+  if (!form.company_kana) { errors.company_kana = '会社フリガナを入力してください'; ok = false }
+  if (!form.user_name) { errors.user_name = '担当者名を入力してください'; ok = false }
+  if (!form.user_kana) { errors.user_kana = '担当者フリガナを入力してください'; ok = false }
+  if (!form.postal_code) { errors.postal_code = '郵便番号を入力してください'; ok = false }
+  if (!form.address) { errors.address = '住所を入力してください'; ok = false }
+  if (!form.email) { errors.email = 'メールを入力してください'; ok = false }
+  if (!form.phone) { errors.phone = '電話番号を入力してください'; ok = false }
 
-  if (!form.address) {
-    errors.address = '住所を入力してください'
-    ok = false
-  }
+  // ✅ ⑤ フォーマットチェック
 
-  if (!form.email) {
-    errors.email = 'メールを入力してください'
-    ok = false
-  }
-
-  if (!form.phone) {
-    errors.phone = '電話番号を入力してください'
-    ok = false
-  }
-
-  if (!form.password) {
-    errors.password = 'パスワードを入力してください'
-    ok = false
-  }
-
-
-
+  // メール
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
-
-if (!emailRegex.test(form.email)) {
-  errors.email = 'メール形式が正しくありません'
-  ok = false
-}
-
-const phoneClean = form.phone.replace(/-/g, '')
-
-if (!/^0\d{9,10}$/.test(phoneClean)) {
-  errors.phone = '電話番号は0から始まる10〜11桁で入力してください'
-  ok = false
-}
-
-const postalRegex = /^\d{3}-?\d{4}$/
-
-if (!postalRegex.test(form.postal_code)) {
-  errors.postal_code = '郵便番号が正しくありません（例: 123-4567）'
-  ok = false
-}
-
-form.postal_code = form.postal_code.replace(/[^\d-]/g, '')
-form.phone = form.phone.replace(/[^\d-]/g, '')
-
-Object.keys(form).forEach(key => {
-  if (typeof form[key] === 'string') {
-    form[key] = form[key].trim()
-  }
-})
-
-const invalidChars = /[<>]/
-
-if (invalidChars.test(form.user_name)) {
-  errors.user_name = '使用できない文字が含まれています'
-  ok = false
-}
-
-const kanaRegex = /^[ァ-ヶー　]+$/
-
-if (!kanaRegex.test(form.company_kana)) {
-  errors.company_kana = '全角カタカナで入力してください'
-  ok = false
-}
-
-if (!kanaRegex.test(form.user_kana)) {
-  errors.user_kana = '全角カタカナで入力してください'
-  ok = false
-}
-
-form.company_kana = form.company_kana.replace(/[ぁ-ん]/g, s =>
-  String.fromCharCode(s.charCodeAt(0) + 0x60)
-)
-
-form.user_kana = form.user_kana.replace(/[ぁ-ん]/g, s =>
-  String.fromCharCode(s.charCodeAt(0) + 0x60)
-)
-
-// ✅ パスワード入力時だけチェック
-if (form.password) {
-
-  if (!form.passwordConfirm) {
-    errors.passwordConfirm = 'パスワード確認を入力してください'
+  if (form.email && !emailRegex.test(form.email)) {
+    errors.email = 'メール形式が正しくありません'
     ok = false
   }
 
-  if (form.password !== form.passwordConfirm) {
-    errors.passwordConfirm = '一致していません'
+  // 電話
+  const phoneClean = form.phone.replace(/-/g, '')
+  if (form.phone && !/^0\d{9,10}$/.test(phoneClean)) {
+    errors.phone = '電話番号は0から始まる10〜11桁で入力してください'
     ok = false
   }
 
-  const passRegex = /^(?=.*[a-zA-Z])(?=.*\d).{6,}$/
-  if (!passRegex.test(form.password)) {
-    errors.password = '英字と数字を含めて6文字以上'
+  // 郵便番号
+  const postalRegex = /^\d{3}-?\d{4}$/
+  if (form.postal_code && !postalRegex.test(form.postal_code)) {
+    errors.postal_code = '郵便番号が正しくありません（例: 123-4567）'
     ok = false
   }
-}
 
+  // フリカナ
+  const kanaRegex = /^[ァ-ヶー　]+$/
+  if (form.company_kana && !kanaRegex.test(form.company_kana)) {
+    errors.company_kana = '全角カタカナで入力してください'
+    ok = false
+  }
 
+  if (form.user_kana && !kanaRegex.test(form.user_kana)) {
+    errors.user_kana = '全角カタカナで入力してください'
+    ok = false
+  }
+
+  // 禁止文字
+  const invalidChars = /[<>]/
+  if (invalidChars.test(form.user_name)) {
+    errors.user_name = '使用できない文字が含まれています'
+    ok = false
+  }
+
+  // ✅ ⑥ パスワード（入力された時だけ）
+  if (form.password) {
+
+    if (!form.passwordConfirm) {
+      errors.passwordConfirm = 'パスワード確認を入力してください'
+      ok = false
+    }
+
+    if (form.password !== form.passwordConfirm) {
+      errors.passwordConfirm = '一致していません'
+      ok = false
+    }
+
+    const passRegex = /^(?=.*[a-zA-Z])(?=.*\d).{6,}$/
+    if (!passRegex.test(form.password)) {
+      errors.password = '英字と数字を含めて6文字以上'
+      ok = false
+    }
+  }
+
+  // ✅ NGなら終了
   if (!ok) return
 
   try {
     const user = JSON.parse(localStorage.getItem('user'))
 
-    // ✅ 送信データを分離
     const dataToSend = { ...form }
 
-    // ✅ パスワード未入力なら削除（重要🔥）
+    // ✅ パスワード未入力なら削除
     if (!form.password) {
       delete dataToSend.password
     }
@@ -310,7 +277,7 @@ if (form.password) {
       return
     }
 
-    // ✅ ローカル更新
+    // ✅ localStorage更新
     const updatedUser = { ...user, ...dataToSend }
     localStorage.setItem('user', JSON.stringify(updatedUser))
 
@@ -321,4 +288,5 @@ if (form.password) {
     alert('サーバエラー')
   }
 }
+
 </script>
