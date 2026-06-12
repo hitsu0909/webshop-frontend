@@ -154,110 +154,164 @@ onMounted(() => {
 // ✅ 保存処理
 const errors = reactive({})
 
-// const save = () => {
-
-//   // 初期化
-//   Object.keys(errors).forEach(k => errors[k] = '')
-
-//   let ok = true
-
-//   if (!form.company_name) {
-//     errors.company_name = '必須です'
-//     ok = false
-//   }
-
-//   if (!form.company_kana) {
-//     errors.company_kana = '必須です'
-//     ok = false
-//   }
-
-//   if (!form.user_name) {
-//     errors.user_name = '必須です'
-//     ok = false
-//   }
-
-//   if (!form.user_kana) {
-//     errors.user_kana = '必須です'
-//     ok = false
-//   }
-
-//   if (!form.postal_code) {
-//     errors.postal_code = '必須です'
-//     ok = false
-//   }
-
-//   if (!form.address) {
-//     errors.address = '必須です'
-//     ok = false
-//   }
-
-//   if (!form.email) {
-//     errors.email = '必須です'
-//     ok = false
-//   }
-
-//   if (!form.phone) {
-//     errors.phone = '必須です'
-//     ok = false
-//   }
-
-//   if (!form.password) {
-//     errors.password = '必須です'
-//     ok = false
-//   }
-
-//   if (!form.passwordConfirm) {
-//     errors.passwordConfirm = '必須です'
-//     ok = false
-//   }
-
-//   if (form.password !== form.passwordConfirm) {
-//     errors.passwordConfirm = '一致していません'
-//     ok = false
-//   }
-
-//   if (!ok) return
-
-//   // ✅ 保存
-//   localStorage.setItem('user', JSON.stringify(form))
-
-//   // ✅ 確認画面へ
-//   router.push('/profile')
-
-// }
-
 const save = async () => {
   Object.keys(errors).forEach(k => errors[k] = '')
   let ok = true
 
-  // ✅ バリデーション（そのまま）
-  if (!form.company_name) { errors.company_name = '必須です'; ok = false }
-  if (!form.company_kana) { errors.company_kana = '必須です'; ok = false }
-  if (!form.user_name) { errors.user_name = '必須です'; ok = false }
-  if (!form.user_kana) { errors.user_kana = '必須です'; ok = false }
-  if (!form.postal_code) { errors.postal_code = '必須です'; ok = false }
-  if (!form.address) { errors.address = '必須です'; ok = false }
-  if (!form.email) { errors.email = '必須です'; ok = false }
-  if (!form.phone) { errors.phone = '必須です'; ok = false }
+  if (!form.company_name) {
+    errors.company_name = '会社名を入力してください'
+    ok = false
+  }
+
+  if (!form.company_kana) {
+    errors.company_kana = '会社フリガナを入力してください'
+    ok = false
+  }
+
+  if (!form.user_name) {
+    errors.user_name = '担当者名を入力してください'
+    ok = false
+  }
+
+  if (!form.user_kana) {
+    errors.user_kana = '担当者フリガナを入力してください'
+    ok = false
+  }
+
+  if (!form.postal_code) {
+    errors.postal_code = '郵便番号を入力してください'
+    ok = false
+  }
+
+  if (!form.address) {
+    errors.address = '住所を入力してください'
+    ok = false
+  }
+
+  if (!form.email) {
+    errors.email = 'メールを入力してください'
+    ok = false
+  }
+
+  if (!form.phone) {
+    errors.phone = '電話番号を入力してください'
+    ok = false
+  }
+
+  if (!form.password) {
+    errors.password = 'パスワードを入力してください'
+    ok = false
+  }
+
+
+
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+
+if (!emailRegex.test(form.email)) {
+  errors.email = 'メール形式が正しくありません'
+  ok = false
+}
+
+const phoneClean = form.phone.replace(/-/g, '')
+
+if (!/^0\d{9,10}$/.test(phoneClean)) {
+  errors.phone = '電話番号は0から始まる10〜11桁で入力してください'
+  ok = false
+}
+
+const postalRegex = /^\d{3}-?\d{4}$/
+
+if (!postalRegex.test(form.postal_code)) {
+  errors.postal_code = '郵便番号が正しくありません（例: 123-4567）'
+  ok = false
+}
+
+form.postal_code = form.postal_code.replace(/[^\d-]/g, '')
+form.phone = form.phone.replace(/[^\d-]/g, '')
+
+Object.keys(form).forEach(key => {
+  if (typeof form[key] === 'string') {
+    form[key] = form[key].trim()
+  }
+})
+
+const invalidChars = /[<>]/
+
+if (invalidChars.test(form.user_name)) {
+  errors.user_name = '使用できない文字が含まれています'
+  ok = false
+}
+
+const kanaRegex = /^[ァ-ヶー　]+$/
+
+if (!kanaRegex.test(form.company_kana)) {
+  errors.company_kana = '全角カタカナで入力してください'
+  ok = false
+}
+
+if (!kanaRegex.test(form.user_kana)) {
+  errors.user_kana = '全角カタカナで入力してください'
+  ok = false
+}
+
+form.company_kana = form.company_kana.replace(/[ぁ-ん]/g, s =>
+  String.fromCharCode(s.charCodeAt(0) + 0x60)
+)
+
+form.user_kana = form.user_kana.replace(/[ぁ-ん]/g, s =>
+  String.fromCharCode(s.charCodeAt(0) + 0x60)
+)
+
+// ✅ パスワード入力時だけチェック
+if (form.password) {
+
+  if (!form.passwordConfirm) {
+    errors.passwordConfirm = 'パスワード確認を入力してください'
+    ok = false
+  }
+
+  if (form.password !== form.passwordConfirm) {
+    errors.passwordConfirm = '一致していません'
+    ok = false
+  }
+
+  const passRegex = /^(?=.*[a-zA-Z])(?=.*\d).{6,}$/
+  if (!passRegex.test(form.password)) {
+    errors.password = '英字と数字を含めて6文字以上'
+    ok = false
+  }
+}
+
 
   if (!ok) return
 
   try {
     const user = JSON.parse(localStorage.getItem('user'))
 
-    const res = await fetch(`https://webshop-backend-ejb6.onrender.com/user/${user.user_id}`, {
-      method: 'PUT',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(form)
-    })
+    // ✅ 送信データを分離
+    const dataToSend = { ...form }
+
+    // ✅ パスワード未入力なら削除（重要🔥）
+    if (!form.password) {
+      delete dataToSend.password
+    }
+
+    const res = await fetch(
+      `https://webshop-backend-ejb6.onrender.com/user/${user.user_id}`,
+      {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(dataToSend)
+      }
+    )
 
     if (!res.ok) {
       alert('更新失敗')
       return
     }
 
-    // ✅ 最新情報でlocalStorage更新
-    const updatedUser = { ...user, ...form }
+    // ✅ ローカル更新
+    const updatedUser = { ...user, ...dataToSend }
     localStorage.setItem('user', JSON.stringify(updatedUser))
 
     router.push('/profile')
