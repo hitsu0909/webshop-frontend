@@ -250,6 +250,22 @@ if (invalidChars.test(form.user_name)) {
   ok = false
 }
 
+const kanaRegex = /^[ァ-ヶー　]+$/
+
+if (!kanaRegex.test(form.company_kana)) {
+  errors.company_kana = '全角カタカナで入力してください'
+  ok = false
+}
+
+if (!kanaRegex.test(form.user_kana)) {
+  errors.user_kana = '全角カタカナで入力してください'
+  ok = false
+}
+
+form.company_kana = form.company_kana.replace(/[ぁ-ん]/g, s =>
+  String.fromCharCode(s.charCodeAt(0) + 0x60)
+)
+
   if (!ok) {
     loading.value = false
     return
