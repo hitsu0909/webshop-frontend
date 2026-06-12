@@ -15,7 +15,7 @@
           <p class="company-name">{{ user?.company_name }}</p>
           <p class="user-name">{{ user?.user_name }}　様▼</p>
           </div>
-          
+          </div>
           <!-- ✅ メニュー追加 -->
           <div v-if="isOpen" class="dropdown">
             <div @click="goProfile">顧客情報確認</div>
@@ -30,7 +30,7 @@
           <p class="form-note">
             ※名前をクリックするとメニューが表示されます
           </p>
-        </div>
+        
       </div>
 
     </header>
