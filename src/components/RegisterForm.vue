@@ -140,11 +140,11 @@ const form = reactive({
 
 const errors = reactive({})
 const loading = ref(false)
-
+let ok = true
 const validate = async () => {
   Object.keys(errors).forEach(k => errors[k] = '')
 
-  let ok = true
+  
 
   if (!form.company_name) {
     errors.company_name = '会社名を入力してください'
