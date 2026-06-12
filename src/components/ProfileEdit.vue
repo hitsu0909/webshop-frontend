@@ -117,7 +117,7 @@
 </template>
 
 <script setup>
-import { reactive, onMounted } from 'vue'
+import { reactive, onMounted, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import HeaderBar from './HeaderBar.vue'
 import FooterBar from './FooterBar.vue'
