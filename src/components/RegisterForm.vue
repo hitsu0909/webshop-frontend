@@ -266,6 +266,10 @@ form.company_kana = form.company_kana.replace(/[ぁ-ん]/g, s =>
   String.fromCharCode(s.charCodeAt(0) + 0x60)
 )
 
+form.user_kana = form.user_kana.replace(/[ぁ-ん]/g, s =>
+  String.fromCharCode(s.charCodeAt(0) + 0x60)
+)
+
   if (!ok) {
     loading.value = false
     return
