@@ -54,14 +54,14 @@
 
               <th class="form-label">郵便番号<span class="required">*</span></th>
               <td class="form-input">
-                <input type="tel" v-model="form.postal_code" />
+                <input v-model="form.postal_code" inputmode="numeric" />
                 <p class="error">{{ errors.postal_code }}</p>
               </td>
             </tr>
 
             <!-- 住所（横幅フル） -->
             <tr>
-              <th class="form-label">会社住所<span class="required">*</span></th>
+              <th class="form-label">住所<span class="required">*</span></th>
               <td class="full-width" colspan="3">
                 <input v-model="form.address" />
                 <p class="error">{{ errors.address }}</p>
@@ -78,7 +78,7 @@
 
               <th class="form-label">電話番号<span class="required">*</span></th>
               <td class="form-input">
-                <input type="tel" v-model="form.phone" />
+                <input v-model="form.phone" inputmode="numeric" />
                 <p class="error">{{ errors.phone }}</p>
               </td>
             </tr>
@@ -91,7 +91,7 @@
                 <p class="error">{{ errors.password }}</p>
               </td>
 
-              <th class="form-label">確認<span class="required">*</span></th>
+              <th class="form-label">パスワード確認<span class="required">*</span></th>
               <td class="form-input">
                 <input type="password" v-model="form.passwordConfirm" />
                 <p class="error">{{ errors.passwordConfirm }}</p>
@@ -139,60 +139,60 @@ const form = reactive({
 })
 
 const errors = reactive({})
+const loading = ref(false)
 
-const validate = () => {
+const validate = async () => {
   Object.keys(errors).forEach(k => errors[k] = '')
 
   let ok = true
 
-  
   if (!form.company_name) {
-    errors.company_name = '必須です'
+    errors.company_name = '会社名を入力してください'
     ok = false
   }
 
   if (!form.company_kana) {
-    errors.company_kana = '必須です'
+    errors.company_kana = '会社フリガナを入力してください'
     ok = false
   }
 
   if (!form.user_name) {
-    errors.user_name = '必須です'
+    errors.user_name = '担当者名を入力してください'
     ok = false
   }
 
   if (!form.user_kana) {
-    errors.user_kana = '必須です'
+    errors.user_kana = '担当者フリガナを入力してください'
     ok = false
   }
 
   if (!form.postal_code) {
-    errors.postal_code = '必須です'
+    errors.postal_code = '郵便番号を入力してください'
     ok = false
   }
 
   if (!form.address) {
-    errors.address = '必須です'
+    errors.address = '住所を入力してください'
     ok = false
   }
 
   if (!form.email) {
-    errors.email = '必須です'
+    errors.email = 'メールを入力してください'
     ok = false
   }
 
   if (!form.phone) {
-    errors.phone = '必須です'
+    errors.phone = '電話番号を入力してください'
     ok = false
   }
 
   if (!form.password) {
-    errors.password = '必須です'
+    errors.password = 'パスワードを入力してください'
     ok = false
   }
 
   if (!form.passwordConfirm) {
-    errors.passwordConfirm = '必須です'
+    errors.passwordConfirm = 'パスワード確認を入力してください'
     ok = false
   }
 
@@ -201,14 +201,66 @@ const validate = () => {
     ok = false
   }
 
-  if (!ok) return
+  if (loading.value) return
+  loading.value = true
 
+  // validation...
+
+  if (!ok) {
+    loading.value = false
+    return
+  }
+
+  loading.value = false
   
 // ✅ 確認画面へデータ渡す
-  
+  if (!ok) return
 localStorage.setItem('form', JSON.stringify(form))
 router.push('/confirm')
-
-
 }
+
+const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+
+if (!emailRegex.test(form.email)) {
+  errors.email = 'メール形式が正しくありません'
+  ok = false
+}
+
+const phoneRegex = /^[0-9-]{10,13}$/
+
+if (!phoneRegex.test(form.phone)) {
+  errors.phone = '電話番号が正しくありません'
+  ok = false
+}
+
+const postalRegex = /^\d{3}-?\d{4}$/
+
+if (!postalRegex.test(form.postal_code)) {
+  errors.postal_code = '郵便番号が正しくありません（例: 123-4567）'
+  ok = false
+}
+
+const passRegex = /^(?=.*[a-zA-Z])(?=.*\d).{6,}$/
+
+if (!passRegex.test(form.password)) {
+  errors.password = '英字と数字を含めて6文字以上'
+  ok = false
+}
+
+form.postal_code = form.postal_code.replace(/[^\d-]/g, '')
+form.phone = form.phone.replace(/[^\d-]/g, '')
+
+Object.keys(form).forEach(key => {
+  if (typeof form[key] === 'string') {
+    form[key] = form[key].trim()
+  }
+})
+
+const invalidChars = /[<>]/
+
+if (invalidChars.test(form.user_name)) {
+  errors.user_name = '使用できない文字が含まれています'
+  ok = false
+}
+
 </script>
