@@ -140,11 +140,11 @@ const form = reactive({
 
 const errors = reactive({})
 const loading = ref(false)
-let ok = true
+
 const validate = async () => {
   Object.keys(errors).forEach(k => errors[k] = '')
 
-  
+  let ok = true
 
   if (!form.company_name) {
     errors.company_name = '会社名を入力してください'
@@ -206,20 +206,7 @@ const validate = async () => {
 
   // validation...
 
-  if (!ok) {
-    loading.value = false
-    return
-  }
-
-  loading.value = false
-  
-// ✅ 確認画面へデータ渡す
-  if (!ok) return
-localStorage.setItem('form', JSON.stringify(form))
-router.push('/confirm')
-}
-
-const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 
 if (!emailRegex.test(form.email)) {
   errors.email = 'メール形式が正しくありません'
@@ -262,5 +249,19 @@ if (invalidChars.test(form.user_name)) {
   errors.user_name = '使用できない文字が含まれています'
   ok = false
 }
+
+  if (!ok) {
+    loading.value = false
+    return
+  }
+
+  loading.value = false
+  
+// ✅ 確認画面へデータ渡す
+  if (!ok) return
+localStorage.setItem('form', JSON.stringify(form))
+router.push('/confirm')
+}
+
 
 </script>
