@@ -10,9 +10,14 @@
 
         <!-- ✅ 右上エリア -->
         <div class="user-info" v-show="isLogin && user" ref="menuRef">
+          
+          <p class="form-note">
+            ※名前をクリックするとメニューが表示されます
+          </p>
+
           <div @click.stop="toggleMenu">
           <p class="company-name">{{ user?.company_name }}</p>
-          <p class="user-name">{{ user?.user_name }}　様</p>
+          <p class="user-name">{{ user?.user_name }}　様▼</p>
           </div>
           
           
