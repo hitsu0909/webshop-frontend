@@ -5,7 +5,7 @@
 
         <h1 class="site-title" @click="goHome">海外商品の法人通販サイト</h1>
         <p class="site-description">
-          品揃えがいい、個人の事業者様でも手軽に仕入が可能な激安卸問屋
+          品揃えがいいお店
         </p>
 
         <!-- ✅ 右上エリア -->
@@ -16,8 +16,6 @@
           <p class="user-name">{{ user?.user_name }}　様▼</p>
           </div>
           
-          
-
           <!-- ✅ メニュー追加 -->
           <div v-if="isOpen" class="dropdown">
             <div @click="goProfile">顧客情報確認</div>
