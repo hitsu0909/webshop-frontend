@@ -213,10 +213,10 @@ if (!emailRegex.test(form.email)) {
   ok = false
 }
 
-const phoneRegex = /^[0-9-]{10,13}$/
+const phoneClean = form.phone.replace(/-/g, '')
 
-if (!phoneRegex.test(form.phone)) {
-  errors.phone = '電話番号が正しくありません'
+if (!/^0\d{9,10}$/.test(phoneClean)) {
+  errors.phone = '電話番号は10〜11桁で入力してください'
   ok = false
 }
 
