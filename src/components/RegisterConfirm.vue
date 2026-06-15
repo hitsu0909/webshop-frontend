@@ -127,6 +127,11 @@ const maskedPassword = computed(() => {
 
 const register = async () => {
   try {
+
+    // ✅ データ整形（ここ重要🔥）
+    const phone = (form.value.phone || '').replace(/-/g, '')
+    const postal_code = (form.value.postal_code || '').replace(/-/g, '')
+
     const res = await fetch('https://webshop-backend-ejb6.onrender.com/register', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -136,10 +141,10 @@ const register = async () => {
         user_name: form.value.user_name,
         user_kana: form.value.user_kana,
         department: form.value.department,
-        postal_code: form.value.postal_code,
+        postal_code: postal_code,   // ✅ 統一済データ
         address: form.value.address,
         email: form.value.email,
-        phone: form.value.phone,
+        phone: phone,              // ✅ 統一済データ
         password: form.value.password
       })
     })
@@ -149,7 +154,9 @@ const register = async () => {
       return
     }
 
+    // ✅ ローカル削除
     localStorage.removeItem('form')
+
     router.push('/complete')
 
   } catch (err) {

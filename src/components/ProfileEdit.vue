@@ -160,12 +160,12 @@ const save = async () => {
   Object.keys(errors).forEach(k => errors[k] = '')
   let ok = true
 
-  // ✅ ① 全項目安全化（最重要🔥）
+  // ✅ ① 全項目安全化
   Object.keys(form).forEach(key => {
     form[key] = (form[key] || '').toString().trim()
   })
 
-  // ✅ ② フリガナ変換（先にやる）
+  // ✅ ② フリガナ変換
   form.company_kana = form.company_kana.replace(/[ぁ-ん]/g, s =>
     String.fromCharCode(s.charCodeAt(0) + 0x60)
   )
@@ -174,7 +174,7 @@ const save = async () => {
     String.fromCharCode(s.charCodeAt(0) + 0x60)
   )
 
-  // ✅ ③ 数値系の整形
+  // ✅ ③ 入力整形（画面用）
   form.phone = form.phone.replace(/[^\d-]/g, '')
   form.postal_code = form.postal_code.replace(/[^\d-]/g, '')
 
@@ -188,30 +188,25 @@ const save = async () => {
   if (!form.email) { errors.email = 'メールを入力してください'; ok = false }
   if (!form.phone) { errors.phone = '電話番号を入力してください'; ok = false }
 
-  // ✅ ⑤ フォーマットチェック
-
-  // メール
+  // ✅ フォーマットチェック
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
   if (form.email && !emailRegex.test(form.email)) {
     errors.email = 'メール形式が正しくありません'
     ok = false
   }
 
-  // 電話
   const phoneClean = form.phone.replace(/-/g, '')
   if (form.phone && !/^0\d{9,10}$/.test(phoneClean)) {
     errors.phone = '電話番号は0から始まる10〜11桁で入力してください'
     ok = false
   }
 
-  // 郵便番号
   const postalRegex = /^\d{3}-?\d{4}$/
   if (form.postal_code && !postalRegex.test(form.postal_code)) {
     errors.postal_code = '郵便番号が正しくありません（例: 123-4567）'
     ok = false
   }
 
-  // フリカナ
   const kanaRegex = /^[ァ-ヶー　]+$/
   if (form.company_kana && !kanaRegex.test(form.company_kana)) {
     errors.company_kana = '全角カタカナで入力してください'
@@ -223,14 +218,13 @@ const save = async () => {
     ok = false
   }
 
-  // 禁止文字
   const invalidChars = /[<>]/
   if (invalidChars.test(form.user_name)) {
     errors.user_name = '使用できない文字が含まれています'
     ok = false
   }
 
-  // ✅ ⑥ パスワード（入力された時だけ）
+  // ✅ パスワード（入力時のみ）
   if (form.password) {
 
     if (!form.passwordConfirm) {
@@ -250,13 +244,17 @@ const save = async () => {
     }
   }
 
-  // ✅ NGなら終了
   if (!ok) return
 
   try {
     const user = JSON.parse(localStorage.getItem('user'))
 
+    // ✅ ✅ ✅ ここが今回の追加ポイント🔥
     const dataToSend = { ...form }
+
+    // ✅ ハイフン削除（DB統一）
+    dataToSend.phone = (dataToSend.phone || '').replace(/-/g, '')
+    dataToSend.postal_code = (dataToSend.postal_code || '').replace(/-/g, '')
 
     // ✅ パスワード未入力なら削除
     if (!form.password) {
@@ -277,7 +275,6 @@ const save = async () => {
       return
     }
 
-    // ✅ localStorage更新
     const updatedUser = { ...user, ...dataToSend }
     localStorage.setItem('user', JSON.stringify(updatedUser))
 
