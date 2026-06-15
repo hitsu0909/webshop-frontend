@@ -203,7 +203,7 @@ const save = async () => {
 
   const postalRegex = /^\d{3}-?\d{4}$/
   if (form.postal_code && !postalRegex.test(form.postal_code)) {
-    errors.postal_code = '郵便番号が正しくありません（例: 123-4567）'
+    errors.postal_code = '郵便番号が正しくありません（例: 123-4567,1234567）'
     ok = false
   }
 
