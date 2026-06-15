@@ -53,7 +53,7 @@
 
 </tbody>
       </table>
-      <p class="form-note"><span class="required">※</span>注文項目行をクリックすると詳細メニューが表示されます</p>
+      <p class="form-note"><span class="required">※</span>注文項目行をクリックすると詳細メニューが表示されます。</p>
       <p class="form-note"><span class="required">※</span>金額に10%の消費税が含んでいます。</p>
     </main>
     <div class="button-group">

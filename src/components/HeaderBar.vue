@@ -16,7 +16,7 @@
           <p class="user-name">{{ user?.user_name }}　様▼</p>
           </div>
           <p class="form-note">
-            ※名前をクリックするとメニューが表示されます
+            ※名前をクリックするとメニューが表示されます。
           </p>
           </div>
           <!-- ✅ メニュー追加 -->

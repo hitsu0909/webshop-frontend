@@ -84,7 +84,7 @@
           <div>合計点数：{{ totalQuantity }}点</div>
           <div>合計金額：¥{{ totalPrice.toLocaleString() }}</div>
         </div>
-        <p class="form-note"><span class="required">※</span>商品項目行をクリックすると詳細メニューが表示されます</p>
+        <p class="form-note"><span class="required">※</span>商品項目行をクリックすると詳細メニューが表示されます。</p>
         <p class="form-note"><span class="required">※</span>金額に10%の消費税が含んでいます。</p>
         <!-- 戻る -->
         <div class="button-group">
