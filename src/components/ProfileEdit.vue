@@ -262,18 +262,24 @@ const save = async () => {
     }
 
     const res = await fetch(
-      `https://webshop-backend-ejb6.onrender.com/user/${user.user_id}`,
-      {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(dataToSend)
-      }
-    )
+  `https://webshop-backend-ejb6.onrender.com/user/${user.user_id}`,
+  {
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(dataToSend)
+  }
+)
 
-    if (!res.ok) {
-      alert('更新失敗')
-      return
-    }
+// ✅ ✅ ✅ ここが修正ポイント🔥
+if (!res.ok) {
+  try {
+    const data = await res.json()
+    alert(data.message || '更新失敗')
+  } catch {
+    alert('更新失敗')
+  }
+  return
+}
 
     const updatedUser = { ...user, ...dataToSend }
     localStorage.setItem('user', JSON.stringify(updatedUser))
