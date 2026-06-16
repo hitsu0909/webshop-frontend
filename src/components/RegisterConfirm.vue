@@ -150,9 +150,15 @@ const register = async () => {
     })
 
     if (!res.ok) {
-      alert('登録失敗')
-      return
-    }
+  try {
+    const data = await res.json()
+    alert(data.message || '登録失敗')
+  } catch {
+    alert('登録失敗')
+  }
+  return
+}
+
 
     // ✅ ローカル削除
     localStorage.removeItem('form')
